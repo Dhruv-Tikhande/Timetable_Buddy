@@ -1,7 +1,7 @@
 {
-  "name": "college-scheduling-system",
+  "name": "timetable-buddy",
   "version": "1.0.0",
-  "description": "A full-stack college scheduling management system",
+  "description": "Timetable Buddy — A full-stack web application for students and faculties to manage lecture schedules easily.",
   "private": true,
   "scripts": {
     "start": "cd backend && npm start", 

@@ -87,6 +87,14 @@ export const schedulesAPI = {
   deleteSchedule: (id: string) => api.delete(`/schedules/${id}`),
 };
 
+// Assignments API
+export const assignmentsAPI = {
+  list: () => api.get('/assignments'),
+  create: (data: any) => api.post('/assignments', data),
+  submit: (id: string) => api.post(`/assignments/${id}/submit`),
+  remove: (id: string) => api.delete(`/assignments/${id}`),
+};
+
 // Users API
 export const usersAPI = {
   getUsers: () => api.get('/users'),

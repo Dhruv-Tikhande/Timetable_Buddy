@@ -32,6 +32,202 @@ interface SlotFormData {
   isRecurring: boolean;
 }
 
+// NOTE: Hoisting the modal component to top-level keeps its component type stable across
+// renders. Defining it inline inside the parent caused React to treat it as a new type
+// every render, unmounting/remounting inputs and thus losing focus on each keystroke.
+const SlotModal = ({
+  editingSlot,
+  days,
+  formData,
+  formErrors,
+  handleInputChange,
+  handleSubmit,
+  handleCloseModal,
+}: {
+  editingSlot: LectureSlot | null;
+  days: string[];
+  formData: SlotFormData;
+  formErrors: Record<string, string>;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+  handleCloseModal: () => void;
+}) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex justify-between items-center">
+          <h3 className="text-xl font-semibold text-gray-900">
+            {editingSlot ? 'Edit Lecture Slot' : 'Create New Lecture Slot'}
+          </h3>
+          <button
+            onClick={handleCloseModal}
+            className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Subject Name *
+            </label>
+            <input
+              type="text"
+              name="subjectName"
+              value={formData.subjectName}
+              onChange={handleInputChange}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
+                formErrors.subjectName ? 'border-red-300' : 'border-gray-300'
+              }`}
+              placeholder="e.g., Data Structures"
+            />
+            {formErrors.subjectName && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.subjectName}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Venue *
+            </label>
+            <input
+              type="text"
+              name="venue"
+              value={formData.venue}
+              onChange={handleInputChange}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
+                formErrors.venue ? 'border-red-300' : 'border-gray-300'
+              }`}
+              placeholder="e.g., Room 101"
+            />
+            {formErrors.venue && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.venue}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Capacity *
+            </label>
+            <input
+              type="number"
+              name="capacity"
+              min="1"
+              max="500"
+              value={formData.capacity}
+              onChange={handleInputChange}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
+                formErrors.capacity ? 'border-red-300' : 'border-gray-300'
+              }`}
+            />
+            {formErrors.capacity && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.capacity}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Day of Week *
+            </label>
+            <select
+              name="dayOfWeek"
+              value={formData.dayOfWeek}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              {days.map((day, index) => (
+                <option key={index} value={index}>{day}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Start Time *
+            </label>
+            <input
+              type="time"
+              name="startTime"
+              value={formData.startTime}
+              onChange={handleInputChange}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
+                formErrors.startTime ? 'border-red-300' : 'border-gray-300'
+              }`}
+            />
+            {formErrors.startTime && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.startTime}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              End Time *
+            </label>
+            <input
+              type="time"
+              name="endTime"
+              value={formData.endTime}
+              onChange={handleInputChange}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
+                formErrors.endTime ? 'border-red-300' : 'border-gray-300'
+              }`}
+            />
+            {formErrors.endTime && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.endTime}</p>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Description
+          </label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Optional description for the lecture slot"
+          />
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            name="isRecurring"
+            checked={formData.isRecurring}
+            onChange={handleInputChange}
+            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+          />
+          <label className="ml-2 block text-sm text-gray-700">
+            Recurring weekly
+          </label>
+        </div>
+
+        <div className="flex gap-3 pt-4 border-t border-gray-200">
+          <button
+            type="button"
+            onClick={handleCloseModal}
+            className="flex-1 px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="flex-1 px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200"
+          >
+            {editingSlot ? 'Update Slot' : 'Create Slot'}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+);
+
 const FacultyDashboard = () => {
   const [lectureSlots, setLectureSlots] = useState<LectureSlot[]>([]);
   const [loading, setLoading] = useState(true);
@@ -185,182 +381,7 @@ const FacultyDashboard = () => {
     }
   };
 
-  const SlotModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex justify-between items-center">
-            <h3 className="text-xl font-semibold text-gray-900">
-              {editingSlot ? 'Edit Lecture Slot' : 'Create New Lecture Slot'}
-            </h3>
-            <button
-              onClick={handleCloseModal}
-              className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
-            >
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Subject Name *
-              </label>
-              <input
-                type="text"
-                name="subjectName"
-                value={formData.subjectName}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
-                  formErrors.subjectName ? 'border-red-300' : 'border-gray-300'
-                }`}
-                placeholder="e.g., Data Structures"
-              />
-              {formErrors.subjectName && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.subjectName}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Venue *
-              </label>
-              <input
-                type="text"
-                name="venue"
-                value={formData.venue}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
-                  formErrors.venue ? 'border-red-300' : 'border-gray-300'
-                }`}
-                placeholder="e.g., Room 101"
-              />
-              {formErrors.venue && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.venue}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Capacity *
-              </label>
-              <input
-                type="number"
-                name="capacity"
-                min="1"
-                max="500"
-                value={formData.capacity}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
-                  formErrors.capacity ? 'border-red-300' : 'border-gray-300'
-                }`}
-              />
-              {formErrors.capacity && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.capacity}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Day of Week *
-              </label>
-              <select
-                name="dayOfWeek"
-                value={formData.dayOfWeek}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                {days.map((day, index) => (
-                  <option key={index} value={index}>{day}</option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Start Time *
-              </label>
-              <input
-                type="time"
-                name="startTime"
-                value={formData.startTime}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
-                  formErrors.startTime ? 'border-red-300' : 'border-gray-300'
-                }`}
-              />
-              {formErrors.startTime && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.startTime}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                End Time *
-              </label>
-              <input
-                type="time"
-                name="endTime"
-                value={formData.endTime}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 ${
-                  formErrors.endTime ? 'border-red-300' : 'border-gray-300'
-                }`}
-              />
-              {formErrors.endTime && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.endTime}</p>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Optional description for the lecture slot"
-            />
-          </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="isRecurring"
-              checked={formData.isRecurring}
-              onChange={handleInputChange}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-            />
-            <label className="ml-2 block text-sm text-gray-700">
-              Recurring weekly
-            </label>
-          </div>
-
-          <div className="flex gap-3 pt-4 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={handleCloseModal}
-              className="flex-1 px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors duration-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200"
-            >
-              {editingSlot ? 'Update Slot' : 'Create Slot'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+  // (removed inline SlotModal to prevent remounting)
 
   const SlotCard = ({ slot }: { slot: LectureSlot }) => (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -586,7 +607,17 @@ const FacultyDashboard = () => {
         )}
 
         {/* Modal */}
-        {showModal && <SlotModal />}
+        {showModal && (
+          <SlotModal
+            editingSlot={editingSlot}
+            days={days}
+            formData={formData}
+            formErrors={formErrors}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+            handleCloseModal={handleCloseModal}
+          />
+        )}
       </div>
     </div>
   );

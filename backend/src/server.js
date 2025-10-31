@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import connectDB from './utils/database.js';
 import authRoutes from './routes/auth.js';
 import courseRoutes from './routes/courses.js';
+import assignmentRoutes from './routes/assignments.js';
 import scheduleRoutes from './routes/schedules.js';
 import userRoutes from './routes/users.js';
 import facultyRoutes from './routes/faculty.js';
@@ -71,6 +72,7 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/assignments', assignmentRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/faculty', facultyRoutes);

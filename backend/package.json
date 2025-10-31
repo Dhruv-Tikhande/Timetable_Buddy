@@ -1,7 +1,7 @@
 {
-  "name": "college-scheduling-backend",
+  "name": "timetable-buddy-backend",
   "version": "1.0.0",
-  "description": "Backend API for College Scheduling System",
+  "description": "Backend API for Timetable Buddy",
   "main": "src/server.js",
   "type": "module",
   "scripts": {

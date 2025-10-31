@@ -1,7 +1,7 @@
 {
-  "name": "college-scheduling-frontend",
+  "name": "timetable-buddy-frontend",
   "version": "1.0.0",
-  "description": "Frontend for College Scheduling System",
+  "description": "Frontend for Timetable Buddy",
   "type": "module",
   "scripts": {
     "start": "vite",

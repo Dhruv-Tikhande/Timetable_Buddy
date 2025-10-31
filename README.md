@@ -1,6 +1,6 @@
-# Lecture Scheduling System
+# Timetable Buddy
 
-A comprehensive full-stack application for managing college lecture schedules, student enrollments, and faculty course management. Built with modern web technologies to provide an intuitive interface for students and faculty to manage their academic schedules.
+Timetable Buddy — A full-stack web application for students and faculties to manage lecture schedules easily.
 
 ## 🚀 Tech Stack
 
@@ -143,6 +143,7 @@ LSP-6/
    ```env
    VITE_API_URL=http://localhost:5000/api
    ```
+   The backend CORS `ALLOWED_ORIGINS` defaults to `http://localhost:3000` if not set. For Vite dev (`http://localhost:5173`), ensure `ALLOWED_ORIGINS` includes `http://localhost:5173`.
 
 3. **Start MongoDB:**
    ```bash
@@ -182,17 +183,22 @@ docker-compose logs -f
 # Stop services
 docker-compose down
 ```
+By default, the backend exposes port 5000 and serves the frontend build. If you build and run the standalone frontend image (`Dockerfile.frontend`), it serves on port 80 inside the container; map to a host port as needed (e.g., `-p 5173:80`).
 
 ### Manual Docker Setup
 ```bash
-# Build and run backend
-docker build -f Dockerfile.backend -t college-scheduling-backend .
-docker run -p 5000:5000 --env-file backend/.env college-scheduling-backend
+# Build and run backend (serves API on :5000 and static frontend if built)
+docker build -f Dockerfile.backend -t timetable-buddy-backend .
+docker run -p 5000:5000 --env-file backend/.env timetable-buddy-backend
 
-# Build and run frontend
-docker build -f Dockerfile.frontend -t college-scheduling-frontend .
-docker run -p 3000:3000 college-scheduling-frontend
+# Build and run standalone frontend (served by Nginx on :80 inside container)
+docker build -f Dockerfile.frontend -t timetable-buddy-frontend .
+docker run -p 5173:80 timetable-buddy-frontend
 ```
+Notes:
+- `Dockerfile.backend` exposes port 5000 and includes a health check at `/health`.
+- `Dockerfile.frontend` serves the built app with Nginx on port 80 and includes a root path health check.
+- If you run both containers separately, set `VITE_API_URL` in the frontend image to your backend URL.
 
 ## 🔧 Available Scripts
 
@@ -200,6 +206,8 @@ docker run -p 3000:3000 college-scheduling-frontend
 - `npm run dev` - Start both frontend and backend in development
 - `npm run start` - Start backend in production mode (from root)
 - `npm run build` - Build the frontend application for production
+- `npm run dev:backend` - Start backend dev server only
+- `npm run dev:frontend` - Start frontend dev server only
 
 ### Backend Scripts
 - `npm run dev` - Start development server with nodemon
@@ -207,6 +215,7 @@ docker run -p 3000:3000 college-scheduling-frontend
 - `npm run build` - (No build step required for Node.js)
 - `npm run lint` - Run ESLint
 - `npm run format` - Format with Prettier
+- `npm run seed` - Seed database with sample data
 
 ### Frontend Scripts
 - `npm run dev` - Start Vite development server (default http://localhost:5173)
@@ -219,48 +228,52 @@ docker run -p 3000:3000 college-scheduling-frontend
 ## 🌐 API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - User registration (student/faculty)
+- `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
-- `GET /api/auth/profile` - Get current user profile
-- `PUT /api/auth/profile` - Update user profile
+- `GET /api/auth/me` - Get current user profile (requires auth)
+- `POST /api/auth/logout` - Logout current session
 
 ### Users
 - `GET /api/users` - Get all users (admin only)
-- `GET /api/users/:id` - Get user by ID
-- `PUT /api/users/:id` - Update user
-- `DELETE /api/users/:id` - Delete user
+- `GET /api/users/:id` - Get user by ID (requires auth)
+- `PUT /api/users/:id` - Update user (requires auth)
+- `DELETE /api/users/:id` - Delete user (admin only)
 
 ### Courses
 - `GET /api/courses` - Get all courses
-- `POST /api/courses` - Create new course
+- `POST /api/courses` - Create new course (admin or instructor)
 - `GET /api/courses/:id` - Get course by ID
-- `PUT /api/courses/:id` - Update course
-- `DELETE /api/courses/:id` - Delete course
+- `PUT /api/courses/:id` - Update course (admin or instructor)
+- `DELETE /api/courses/:id` - Delete course (admin only)
+- `PUT /api/courses/:id/enroll` - Enroll in course (requires auth)
+- `PUT /api/courses/:id/drop` - Drop course (requires auth)
 
 ### Lecture Slots
 - `GET /api/lecture-slots` - Get all lecture slots
-- `POST /api/lecture-slots` - Create new lecture slot
 - `GET /api/lecture-slots/:id` - Get lecture slot by ID
-- `PUT /api/lecture-slots/:id` - Update lecture slot
-- `DELETE /api/lecture-slots/:id` - Delete lecture slot
+- `POST /api/lecture-slots` - Create new lecture slot (faculty or admin)
+- `PUT /api/lecture-slots/:id` - Update lecture slot (faculty or admin)
+- `DELETE /api/lecture-slots/:id` - Delete lecture slot (faculty or admin)
 
 ### Faculty
-- `GET /api/faculty/lecture-slots` - Get faculty's lecture slots
-- `POST /api/faculty/lecture-slots` - Create lecture slot (faculty only)
-- `PUT /api/faculty/lecture-slots/:id` - Update lecture slot (faculty only)
-- `DELETE /api/faculty/lecture-slots/:id` - Delete lecture slot (faculty only)
+- `GET /api/faculty/lecture-slots` - Get faculty's lecture slots (faculty or admin)
+- `POST /api/faculty/lecture-slots` - Create lecture slot (faculty or admin)
+- `PUT /api/faculty/lecture-slots/:id` - Update lecture slot (faculty or admin)
+- `DELETE /api/faculty/lecture-slots/:id` - Delete lecture slot (faculty or admin)
 
 ### Enrollments
-- `GET /api/enrollments/my-timetable` - Get student's timetable
-- `POST /api/enrollments/enroll/:slotId` - Enroll in lecture slot
-- `DELETE /api/enrollments/drop/:slotId` - Drop from lecture slot
-- `GET /api/enrollments/:slotId/students` - Get enrolled students (faculty only)
+- `GET /api/enrollments/me` - Get my timetable (student)
+- `POST /api/enrollments/:slotId` - Enroll in lecture slot (student)
+- `DELETE /api/enrollments/:slotId` - Drop from lecture slot (student)
+- `GET /api/enrollments` - List all enrollments (admin)
+- `PUT /api/enrollments/:id/cancel` - Force cancel an enrollment (admin)
 
 ### Schedules
-- `GET /api/schedules` - Get user schedules
-- `POST /api/schedules` - Create schedule
-- `PUT /api/schedules/:id` - Update schedule
-- `DELETE /api/schedules/:id` - Delete schedule
+- `GET /api/schedules` - Get my schedules (requires auth)
+- `POST /api/schedules` - Create schedule (requires auth)
+- `GET /api/schedules/:id` - Get schedule by ID (requires auth)
+- `PUT /api/schedules/:id` - Update schedule (requires auth)
+- `DELETE /api/schedules/:id` - Delete schedule (requires auth)
 
 ### Health Check
 - `GET /health` - Server health status
@@ -307,3 +320,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support, email your-email@example.com or create an issue in the GitHub repository.
+#   T i m e t a b l e _ B u d d y  
+ 

@@ -38,7 +38,7 @@ const Header = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <Calendar className="h-8 w-8 text-indigo-200" />
-              <span className="text-xl font-bold text-white">CollegeScheduler</span>
+              <span className="text-xl font-bold text-white">Timetable Buddy</span>
             </Link>
           </div>
 
