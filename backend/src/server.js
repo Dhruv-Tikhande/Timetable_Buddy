@@ -43,7 +43,7 @@ app.use('/api/', limiter);
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173', 'http://timetable-buddy-dhruv-2026.s3-website.ap-south-1.amazonaws.com' ],
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -80,30 +80,30 @@ app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/lecture-slots', lectureSlotRoutes);
 
 
-// ==========================
-// 📌 Serve React Frontend
-// ==========================
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// // ==========================
+// // 📌 Serve React Frontend
+// // ==========================
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-// Path to frontend build folder (after running `npm run build` in frontend)
-const frontendPath = path.join(__dirname, '../../frontend/dist');
+// // Path to frontend build folder (after running `npm run build` in frontend)
+// const frontendPath = path.join(__dirname, '../../frontend/dist');
 
-// Serve static files
-app.use(express.static(frontendPath));
+// // Serve static files
+// app.use(express.static(frontendPath));
 
-// Catch-all for React Router
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
-
-// // Handle 404 errors
-// app.use('*', (req, res) => {
-//   res.status(404).json({
-//     success: false,
-//     message: `Route ${req.originalUrl} not found`,
-//   });
+// // Catch-all for React Router
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(frontendPath, 'index.html'));
 // });
+
+// Handle 404 errors
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`,
+  });
+});
 
 // Global error handler
 app.use(errorHandler);
