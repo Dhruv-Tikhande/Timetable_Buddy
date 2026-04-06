@@ -2,6 +2,61 @@
 
 Timetable Buddy — A full-stack web application for students and faculties to manage lecture schedules easily.
 
+## 🎯 Problem Statement
+
+Managing lecture schedules in educational institutions is a complex challenge that involves:
+- **Students** struggling to find available lecture slots that fit their schedules
+- **Faculty** manually managing enrollments, waitlists, and capacity constraints
+- **Administrators** lacking visibility into enrollment patterns and resource utilization
+
+Traditional methods (spreadsheets, paper-based systems) are error-prone, time-consuming, and don't scale. Timetable Buddy addresses these pain points by providing a centralized, automated solution for lecture scheduling and enrollment management.
+
+### Key Problems Solved:
+- ✅ Eliminates manual enrollment tracking
+- ✅ Prevents double-booking and scheduling conflicts
+- ✅ Automates waitlist management
+- ✅ Provides real-time availability information
+- ✅ Enables data-driven capacity planning
+
+## 🏗️ System Architecture
+
+Timetable Buddy follows a **three-tier architecture** pattern:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Frontend Layer                         │
+│  React + TypeScript (Port 5173)                          │
+│  - User Interface Components                             │
+│  - State Management (Context API)                        │
+│  - Client-side Routing                                   │
+└──────────────────┬───────────────────────────────────────┘
+                   │ HTTP/REST API
+                   │ (JSON)
+┌──────────────────▼───────────────────────────────────────┐
+│                    Backend Layer                          │
+│  Express.js + Node.js (Port 5000)                        │
+│  - RESTful API Endpoints                                 │
+│  - Business Logic (Controllers)                          │
+│  - Authentication & Authorization                        │
+│  - Request Validation                                    │
+└──────────────────┬───────────────────────────────────────┘
+                   │ Mongoose ODM
+                   │
+┌──────────────────▼───────────────────────────────────────┐
+│                    Database Layer                         │
+│  MongoDB Atlas (Cloud)                                   │
+│  - Document Storage                                       │
+│  - Collections: users, courses, lectureslots, etc.      │
+│  - Indexed Queries                                       │
+└───────────────────────────────────────────────────────────┘
+```
+
+### Architecture Principles:
+- **Separation of Concerns**: Frontend, backend, and database are decoupled
+- **RESTful Design**: Standard HTTP methods for API communication
+- **Stateless Authentication**: JWT tokens for session management
+- **Scalable Database**: MongoDB for flexible schema and horizontal scaling
+
 ## 🚀 Tech Stack
 
 ### Backend
@@ -106,6 +161,211 @@ LSP-6/
 - **Health Checks** - Service health monitoring
 - **Compression** - Optimized response sizes
 
+## 📸 Screenshots
+
+> **Note:** Add screenshots of your application here. Recommended screenshots:
+> - Login/Registration page
+> - Student dashboard with timetable
+> - Faculty dashboard with lecture slots
+> - Enrollment interface
+> - Mobile responsive views
+
+### Demo Video
+> **Note:** Consider adding a demo video link (YouTube, Loom, etc.) showing:
+> - User registration and login
+> - Student enrollment flow
+> - Faculty slot creation
+> - Timetable visualization
+
+### Live Demo
+> **Note:** If deployed, add link here:
+> - 🌐 **Live Application:** [Your deployment URL]
+> - 📱 **API Documentation:** [If using Swagger/Postman]
+
+## 👥 User Roles & Permissions
+
+The application supports four distinct user roles with different access levels:
+
+| Role | Description | Key Permissions |
+|------|-------------|----------------|
+| **Student** | Regular student users | • Browse lecture slots<br>• Enroll/drop from slots<br>• View personal timetable<br>• Manage profile |
+| **Faculty** | Teaching staff | • All student permissions<br>• Create/manage lecture slots<br>• View enrolled students<br>• Manage slot capacity |
+| **Instructor** | Course instructors | • Similar to faculty<br>• Create/manage courses<br>• View course enrollments |
+| **Admin** | System administrators | • All permissions<br>• Manage all users<br>• Delete any resource<br>• View system-wide analytics |
+
+### Access Control Matrix:
+
+| Feature | Student | Faculty | Instructor | Admin |
+|---------|:-------:|:-------:|:----------:|:-----:|
+| Browse Slots | ✅ | ✅ | ✅ | ✅ |
+| Enroll in Slots | ✅ | ❌ | ❌ | ✅ |
+| Create Slots | ❌ | ✅ | ✅ | ✅ |
+| Manage Users | ❌ | ❌ | ❌ | ✅ |
+| View Analytics | ❌ | ✅ | ✅ | ✅ |
+| Delete Resources | ❌ | Own Only | Own Only | ✅ |
+
+**Note:** Role-based access is enforced at both the frontend (UI visibility) and backend (API middleware) levels.
+
+## 🗄️ Database Schema
+
+The application uses MongoDB with the following collections and relationships:
+
+### Core Collections:
+
+1. **users**
+   - Stores user accounts (students, faculty, admin)
+   - Fields: `name`, `email`, `password` (hashed), `role`, `studentId`, `major`, `year`
+   - Indexes: `email` (unique), `studentId` (unique, sparse)
+
+2. **lectureslots**
+   - Stores lecture time slot information
+   - Fields: `subjectName`, `facultyId`, `venue`, `capacity`, `dayOfWeek`, `startTime`, `endTime`
+   - References: `facultyId` → `users._id`
+
+3. **enrollments**
+   - Tracks student enrollments in lecture slots
+   - Fields: `lectureSlotId`, `studentId`, `status` (enrolled/waitlisted/cancelled), `position`
+   - References: `lectureSlotId` → `lectureslots._id`, `studentId` → `users._id`
+   - Unique constraint: `(lectureSlotId, studentId)`
+
+4. **courses**
+   - Course catalog information
+   - Fields: `courseCode`, `title`, `credits`, `department`, `semester`, `year`, `instructor`
+   - References: `instructor` → `users._id`, `prerequisites` → `courses._id[]`
+
+5. **schedules**
+   - User's course schedules
+   - Fields: `user`, `name`, `semester`, `year`, `courses[]`, `totalCredits`
+   - References: `user` → `users._id`, `courses[].course` → `courses._id`
+
+6. **assignments**
+   - Course assignments
+   - Fields: `title`, `courseId`, `facultyId`, `deadline`, `status`
+   - References: `courseId` → `courses._id`, `facultyId` → `users._id`
+
+### Entity Relationships:
+
+```
+users (1) ──< (many) lectureslots [facultyId]
+users (1) ──< (many) enrollments [studentId]
+lectureslots (1) ──< (many) enrollments [lectureSlotId]
+users (1) ──< (many) courses [instructor]
+courses (1) ──< (many) schedules.courses[]
+users (1) ──< (many) schedules [user]
+courses (1) ──< (many) assignments [courseId]
+```
+
+### Database Design Decisions:
+- **Document-based storage** for flexible schema evolution
+- **Referential integrity** maintained through Mongoose references
+- **Indexed queries** for performance optimization
+- **Sparse indexes** for optional unique fields (e.g., `studentId`)
+
+## 🔐 Authentication Flow
+
+The application uses **JWT (JSON Web Tokens)** for stateless authentication:
+
+### Registration Flow:
+1. User submits registration form (name, email, password, role)
+2. Backend validates input using Joi schema
+3. Password is hashed using bcryptjs (salt rounds: 10)
+4. User document created in MongoDB
+5. JWT token generated and returned to client
+6. Token stored in browser `localStorage`
+
+### Login Flow:
+1. User submits credentials (email, password)
+2. Backend finds user by email
+3. Password compared with stored hash using bcryptjs
+4. If valid, JWT token generated with user ID payload
+5. Token returned to client and stored in `localStorage`
+6. Token included in subsequent API requests via `Authorization: Bearer <token>` header
+
+### Protected Route Access:
+1. Client includes JWT token in request header
+2. Backend middleware (`auth.js`) extracts token
+3. Token verified using `JWT_SECRET`
+4. User ID extracted from token payload
+5. User document fetched from database
+6. User object attached to `req.user` for route handlers
+7. Role-based authorization checked if needed
+
+### Security Features:
+- ✅ Passwords never stored in plain text (bcrypt hashing)
+- ✅ Tokens expire after 7 days (configurable via `JWT_EXPIRES_IN`)
+- ✅ Tokens signed with secret key (`JWT_SECRET`)
+- ✅ Protected routes require valid token
+- ✅ Role-based access control (RBAC) middleware
+- ✅ Rate limiting to prevent brute force attacks
+
+## ⚠️ Error Handling & Edge Cases
+
+### Error Handling Strategy:
+
+**Backend Error Handling:**
+- Global error handler middleware catches all unhandled errors
+- Consistent error response format: `{ success: false, message: string }`
+- HTTP status codes: 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Server Error)
+- Mongoose validation errors are formatted for client consumption
+- Database connection errors trigger graceful shutdown
+
+**Frontend Error Handling:**
+- Axios interceptors handle 401 (unauthorized) → redirect to login
+- Toast notifications for user-friendly error messages
+- Loading states prevent duplicate requests
+- Form validation prevents invalid submissions
+
+### Handled Edge Cases:
+
+| Scenario | Handling |
+|----------|----------|
+| **Duplicate Enrollment** | Unique index on `(lectureSlotId, studentId)` prevents duplicates |
+| **Slot Capacity Exceeded** | Enrollment status set to `waitlisted` when capacity full |
+| **Invalid Time Ranges** | Schema validation ensures `startTime < endTime` |
+| **Faculty Role Validation** | Pre-save hook validates faculty role before creating lecture slot |
+| **Concurrent Enrollments** | Database-level constraints prevent race conditions |
+| **Expired JWT Token** | 401 response triggers automatic logout |
+| **Missing Environment Variables** | Server fails fast with clear error message |
+| **Database Connection Loss** | Connection retry logic with exponential backoff |
+
+### Validation Layers:
+1. **Client-side**: Zod schemas for immediate feedback
+2. **Server-side**: Joi schemas for data integrity
+3. **Database-level**: Mongoose schema constraints and indexes
+
+## 🧪 Testing
+
+### Test Coverage:
+
+**Backend Testing:**
+- Unit tests for enrollment logic (see `backend/src/__tests__/enrollments.test.js`)
+- API endpoint testing with Supertest
+- Database model validation tests
+
+**Frontend Testing:**
+- Component testing (to be implemented)
+- Integration testing for user flows
+- E2E testing scenarios (to be implemented)
+
+### Running Tests:
+
+```bash
+# Backend tests
+cd backend
+npm test
+
+# Frontend tests (when implemented)
+cd frontend
+npm test
+```
+
+### Test Strategy:
+- **Unit Tests**: Test individual functions and components
+- **Integration Tests**: Test API endpoints with database
+- **E2E Tests**: Test complete user workflows (planned)
+
+> **Note:** Test coverage is currently limited. Future improvements should include comprehensive test suites for all critical paths.
+
 ## 🛠️ Development Setup
 
 ### Prerequisites
@@ -144,6 +404,44 @@ LSP-6/
    VITE_API_URL=http://localhost:5000/api
    ```
    The backend CORS `ALLOWED_ORIGINS` defaults to `http://localhost:3000` if not set. For Vite dev (`http://localhost:5173`), ensure `ALLOWED_ORIGINS` includes `http://localhost:5173`.
+
+   ### Environment Variable Templates
+
+   **Backend `.env.example`** (create this file in `backend/` directory):
+   ```env
+   # Server Configuration
+   NODE_ENV=development
+   PORT=5000
+   
+   # Database
+   MONGODB_URI=mongodb://localhost:27017/college_scheduling
+   # For MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/college_scheduling
+   
+   # Authentication
+   JWT_SECRET=your-super-secret-jwt-key-change-in-production
+   JWT_EXPIRES_IN=7d
+   
+   # CORS
+   ALLOWED_ORIGINS=http://localhost:5173
+   
+   # Rate Limiting
+   RATE_LIMIT_WINDOW_MS=900000
+   RATE_LIMIT_MAX_REQUESTS=100
+   ```
+
+   **Frontend `.env.example`** (create this file in `frontend/` directory):
+   ```env
+   # Backend API URL
+   VITE_API_URL=http://localhost:5000/api
+   # Alternative: VITE_API_BASE_URL=http://localhost:5000/api
+   ```
+
+   **Important Notes:**
+   - ⚠️ Never commit actual `.env` files to version control
+   - ✅ Use `.env.example` as a template
+   - ✅ Add `.env` to `.gitignore`
+   - ✅ Generate strong `JWT_SECRET` for production (minimum 32 characters)
+   - ✅ Use different secrets for development and production
 
 3. **Start MongoDB:**
    ```bash
@@ -305,6 +603,35 @@ Frontend `.env` example (production):
 VITE_API_URL=https://your-backend-domain/api
 ```
 
+## 🚀 Future Improvements
+
+### Planned Features:
+- [ ] **Email Notifications** - Automated emails for enrollment confirmations and waitlist updates
+- [ ] **Calendar Integration** - Export timetable to Google Calendar/iCal
+- [ ] **Conflict Detection** - Automatic detection of scheduling conflicts
+- [ ] **Advanced Search** - Filter slots by multiple criteria (time, venue, subject)
+- [ ] **Bulk Operations** - Faculty can bulk-create lecture slots
+- [ ] **Analytics Dashboard** - Visual charts for enrollment trends
+- [ ] **Mobile App** - Native mobile application (React Native)
+- [ ] **Real-time Updates** - WebSocket integration for live enrollment updates
+
+### Technical Improvements:
+- [ ] **Comprehensive Testing** - Increase test coverage to >80%
+- [ ] **API Documentation** - Swagger/OpenAPI documentation
+- [ ] **Caching Layer** - Redis for frequently accessed data
+- [ ] **Image Upload** - Profile pictures and course images
+- [ ] **File Attachments** - Assignment file uploads
+- [ ] **Search Optimization** - Full-text search with MongoDB Atlas Search
+- [ ] **Performance Monitoring** - Application performance monitoring (APM)
+- [ ] **CI/CD Pipeline** - Automated testing and deployment
+
+### Known Limitations:
+- ⚠️ No email verification on registration
+- ⚠️ Limited error recovery for network failures
+- ⚠️ No offline support
+- ⚠️ No data export functionality
+- ⚠️ Basic search capabilities (no fuzzy search)
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -320,5 +647,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support, email your-email@example.com or create an issue in the GitHub repository.
-#   T i m e t a b l e _ B u d d y  
+#   T i m e t a b l e _ B u d d y 
+ 
  

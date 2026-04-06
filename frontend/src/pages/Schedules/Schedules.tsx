@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 import { assignmentsAPI, coursesAPI } from '../../utils/api';
 import { Plus, Calendar, Clock, Trash2, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Schedules = () => {
+  const { user } = useAuth();
   const [assignments, setAssignments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [courses, setCourses] = useState<any[]>([]);
+  const currentUserRole = (user?.role ?? '').toLowerCase();
+  const canCreateAssignment = currentUserRole === 'teacher' || currentUserRole === 'faculty';
 
   useEffect(() => {
     fetchAll();
@@ -204,13 +208,15 @@ const Schedules = () => {
             <p className="text-gray-600 mt-2">Track and submit your course assignments.</p>
           </div>
           
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            New Assignment
-          </button>
+          {canCreateAssignment && (
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              New Assignment
+            </button>
+          )}
         </div>
 
         {assignments.length > 0 ? (
@@ -224,9 +230,11 @@ const Schedules = () => {
             <Calendar className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-lg font-medium text-gray-900">No assignments yet</h3>
             <p className="mt-1 text-gray-500 mb-6">Create your first assignment.</p>
-            <button onClick={() => setShowCreateModal(true)} className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
-              <Plus className="h-4 w-4 mr-2" /> New Assignment
-            </button>
+            {canCreateAssignment && (
+              <button onClick={() => setShowCreateModal(true)} className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+                <Plus className="h-4 w-4 mr-2" /> New Assignment
+              </button>
+            )}
           </div>
         )}
 
