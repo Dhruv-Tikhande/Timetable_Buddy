@@ -5,13 +5,15 @@ Timetable Buddy — A full-stack web application for students and faculties to m
 ## 🎯 Problem Statement
 
 Managing lecture schedules in educational institutions is a complex challenge that involves:
+
 - **Students** struggling to find available lecture slots that fit their schedules
 - **Faculty** manually managing enrollments, waitlists, and capacity constraints
 - **Administrators** lacking visibility into enrollment patterns and resource utilization
 
-Traditional methods (spreadsheets, paper-based systems) are error-prone, time-consuming, and don't scale. Timetable Buddy addresses these pain points by providing a centralized, automated solution for lecture scheduling and enrollment management.
+Traditional methods (spreadsheets, paper-based systems) are error-prone, time-consuming, and do not scale. Timetable Buddy addresses these pain points by providing a centralized, automated solution for lecture scheduling and enrollment management.
 
-### Key Problems Solved:
+### Key Problems Solved
+
 - ✅ Eliminates manual enrollment tracking
 - ✅ Prevents double-booking and scheduling conflicts
 - ✅ Automates waitlist management
@@ -22,7 +24,7 @@ Traditional methods (spreadsheets, paper-based systems) are error-prone, time-co
 
 Timetable Buddy follows a **three-tier architecture** pattern:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    Frontend Layer                         │
 │  React + TypeScript (Port 5173)                          │
@@ -51,7 +53,8 @@ Timetable Buddy follows a **three-tier architecture** pattern:
 └───────────────────────────────────────────────────────────┘
 ```
 
-### Architecture Principles:
+### Architecture Principles
+
 - **Separation of Concerns**: Frontend, backend, and database are decoupled
 - **RESTful Design**: Standard HTTP methods for API communication
 - **Stateless Authentication**: JWT tokens for session management
@@ -60,6 +63,7 @@ Timetable Buddy follows a **three-tier architecture** pattern:
 ## 🚀 Tech Stack
 
 ### Backend
+
 - **Node.js 18+** - Runtime environment
 - **Express.js 4.18+** - Web framework
 - **MongoDB 7.0** - Database
@@ -74,6 +78,7 @@ Timetable Buddy follows a **three-tier architecture** pattern:
 - **Compression** - Response compression
 
 ### Frontend
+
 - **React 18.3+** - UI library
 - **TypeScript 5.5+** - Type safety
 - **Vite 5.4+** - Build tool & dev server
@@ -88,44 +93,44 @@ Timetable Buddy follows a **three-tier architecture** pattern:
 
 ## 📁 Project Structure
 
-```
-LSP-6/
-├── project/                 # Main project directory
-│   ├── backend/             # Express.js API server
-│   │   ├── src/
-│   │   │   ├── controllers/ # Route controllers (auth, courses, enrollments, faculty, lectureSlots, schedules, users)
-│   │   │   ├── middleware/  # Custom middleware (auth, errorHandler)
-│   │   │   ├── models/      # Database models (Course, Enrollment, LectureSlot, Schedule, User)
-│   │   │   ├── routes/      # API routes (auth, courses, enrollments, faculty, lectureSlots, schedules, users)
-│   │   │   ├── utils/       # Utility functions (database, seedData)
-│   │   │   ├── __tests__/   # Test files
-│   │   │   └── server.js    # Express server setup
-│   │   ├── package.json
-│   │   └── package-lock.json
-│   ├── frontend/            # React client application
-│   │   ├── src/
-│   │   │   ├── components/  # Reusable UI components (Auth, Layout)
-│   │   │   ├── contexts/    # React contexts (AuthContext)
-│   │   │   ├── pages/       # Page components (Auth, Courses, Dashboard, Faculty, Profile, Schedules, Student)
-│   │   │   ├── utils/       # Utility functions (api)
-│   │   │   ├── App.tsx      # Main app component
-│   │   │   ├── main.tsx     # App entry point
-│   │   │   └── index.css    # Global styles
-│   │   ├── package.json
-│   │   └── package-lock.json
-│   ├── docker/              # Docker configuration files
-│   │   └── mongo-init.js    # MongoDB initialization script
-│   ├── docker-compose.yml   # Docker services configuration
-│   ├── Dockerfile.backend   # Backend container setup
-│   ├── Dockerfile.frontend  # Frontend container setup
-│   ├── package.json         # Root package.json with scripts
-│   ├── package-lock.json    # Root package lock file
-│   └── README.md            # This file
+```text
+TimeTable_Buddy/
+├── backend/                 # Express.js API server
+│   ├── src/
+│   │   ├── controllers/     # Route controllers
+│   │   ├── middleware/      # Custom middleware (auth, errorHandler)
+│   │   ├── models/          # Database models
+│   │   ├── routes/          # API routes
+│   │   ├── utils/           # Utilities (database, seedData)
+│   │   ├── __tests__/       # Tests
+│   │   └── server.js        # Express server setup
+│   ├── package.json
+│   └── package-lock.json
+├── frontend/                # React client application
+│   ├── src/
+│   │   ├── components/      # Reusable UI (Auth, Layout)
+│   │   ├── contexts/        # React contexts (AuthContext)
+│   │   ├── pages/           # Page components
+│   │   ├── utils/           # Utilities (api)
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   ├── package.json
+│   └── package-lock.json
+├── docker/
+│   └── mongo-init.js        # MongoDB initialization script
+├── docker-compose.yml
+├── Dockerfile.backend
+├── Dockerfile.frontend
+├── package.json             # Root scripts (dev, build, install)
+├── package-lock.json
+└── README.md
 ```
 
 ## ✨ Features
 
 ### 🎓 Student Features
+
 - **Lecture Slot Browsing** - View all available lecture slots with filtering and search
 - **Enrollment Management** - Enroll in lecture slots and join waitlists
 - **Personal Timetable** - View enrolled courses in a weekly timetable format
@@ -133,6 +138,7 @@ LSP-6/
 - **Real-time Notifications** - Get notified about enrollment status changes
 
 ### 👨‍🏫 Faculty Features
+
 - **Lecture Slot Creation** - Create and manage lecture slots with detailed information
 - **Student Management** - View enrolled and waitlisted students for each slot
 - **Dashboard Analytics** - Track enrollment statistics and slot performance
@@ -140,6 +146,7 @@ LSP-6/
 - **Capacity Management** - Set and adjust slot capacities based on demand
 
 ### 🔐 Authentication & Security
+
 - **JWT-based Authentication** - Secure user sessions with JSON Web Tokens
 - **Role-based Access Control** - Separate interfaces for students and faculty
 - **Password Security** - Bcrypt hashing for secure password storage
@@ -147,6 +154,7 @@ LSP-6/
 - **CORS Configuration** - Secure cross-origin requests
 
 ### 🎨 User Experience
+
 - **Responsive Design** - Mobile-friendly interface using Tailwind CSS
 - **Modern UI Components** - Clean and intuitive user interface
 - **Real-time Feedback** - Toast notifications for user actions
@@ -154,6 +162,7 @@ LSP-6/
 - **Loading States** - Smooth loading indicators for better UX
 
 ### 🚀 Technical Features
+
 - **RESTful API** - Well-structured API endpoints
 - **Database Optimization** - Efficient MongoDB queries and indexing
 - **Error Handling** - Comprehensive error handling and logging
@@ -164,6 +173,7 @@ LSP-6/
 ## 📸 Screenshots
 
 > **Note:** Add screenshots of your application here. Recommended screenshots:
+>
 > - Login/Registration page
 > - Student dashboard with timetable
 > - Faculty dashboard with lecture slots
@@ -171,14 +181,18 @@ LSP-6/
 > - Mobile responsive views
 
 ### Demo Video
+
 > **Note:** Consider adding a demo video link (YouTube, Loom, etc.) showing:
+>
 > - User registration and login
 > - Student enrollment flow
 > - Faculty slot creation
 > - Timetable visualization
 
 ### Live Demo
+
 > **Note:** If deployed, add link here:
+>
 > - 🌐 **Live Application:** [Your deployment URL]
 > - 📱 **API Documentation:** [If using Swagger/Postman]
 
@@ -193,7 +207,7 @@ The application supports four distinct user roles with different access levels:
 | **Instructor** | Course instructors | • Similar to faculty<br>• Create/manage courses<br>• View course enrollments |
 | **Admin** | System administrators | • All permissions<br>• Manage all users<br>• Delete any resource<br>• View system-wide analytics |
 
-### Access Control Matrix:
+### Access Control Matrix
 
 | Feature | Student | Faculty | Instructor | Admin |
 |---------|:-------:|:-------:|:----------:|:-----:|
@@ -210,7 +224,7 @@ The application supports four distinct user roles with different access levels:
 
 The application uses MongoDB with the following collections and relationships:
 
-### Core Collections:
+### Core Collections
 
 1. **users**
    - Stores user accounts (students, faculty, admin)
@@ -243,9 +257,9 @@ The application uses MongoDB with the following collections and relationships:
    - Fields: `title`, `courseId`, `facultyId`, `deadline`, `status`
    - References: `courseId` → `courses._id`, `facultyId` → `users._id`
 
-### Entity Relationships:
+### Entity Relationships
 
-```
+```text
 users (1) ──< (many) lectureslots [facultyId]
 users (1) ──< (many) enrollments [studentId]
 lectureslots (1) ──< (many) enrollments [lectureSlotId]
@@ -255,7 +269,8 @@ users (1) ──< (many) schedules [user]
 courses (1) ──< (many) assignments [courseId]
 ```
 
-### Database Design Decisions:
+### Database Design Decisions
+
 - **Document-based storage** for flexible schema evolution
 - **Referential integrity** maintained through Mongoose references
 - **Indexed queries** for performance optimization
@@ -265,7 +280,8 @@ courses (1) ──< (many) assignments [courseId]
 
 The application uses **JWT (JSON Web Tokens)** for stateless authentication:
 
-### Registration Flow:
+### Registration Flow
+
 1. User submits registration form (name, email, password, role)
 2. Backend validates input using Joi schema
 3. Password is hashed using bcryptjs (salt rounds: 10)
@@ -273,7 +289,8 @@ The application uses **JWT (JSON Web Tokens)** for stateless authentication:
 5. JWT token generated and returned to client
 6. Token stored in browser `localStorage`
 
-### Login Flow:
+### Login Flow
+
 1. User submits credentials (email, password)
 2. Backend finds user by email
 3. Password compared with stored hash using bcryptjs
@@ -281,7 +298,8 @@ The application uses **JWT (JSON Web Tokens)** for stateless authentication:
 5. Token returned to client and stored in `localStorage`
 6. Token included in subsequent API requests via `Authorization: Bearer <token>` header
 
-### Protected Route Access:
+### Protected Route Access
+
 1. Client includes JWT token in request header
 2. Backend middleware (`auth.js`) extracts token
 3. Token verified using `JWT_SECRET`
@@ -290,7 +308,8 @@ The application uses **JWT (JSON Web Tokens)** for stateless authentication:
 6. User object attached to `req.user` for route handlers
 7. Role-based authorization checked if needed
 
-### Security Features:
+### Security Features
+
 - ✅ Passwords never stored in plain text (bcrypt hashing)
 - ✅ Tokens expire after 7 days (configurable via `JWT_EXPIRES_IN`)
 - ✅ Tokens signed with secret key (`JWT_SECRET`)
@@ -300,9 +319,10 @@ The application uses **JWT (JSON Web Tokens)** for stateless authentication:
 
 ## ⚠️ Error Handling & Edge Cases
 
-### Error Handling Strategy:
+### Error Handling Strategy
 
 **Backend Error Handling:**
+
 - Global error handler middleware catches all unhandled errors
 - Consistent error response format: `{ success: false, message: string }`
 - HTTP status codes: 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Server Error)
@@ -310,12 +330,13 @@ The application uses **JWT (JSON Web Tokens)** for stateless authentication:
 - Database connection errors trigger graceful shutdown
 
 **Frontend Error Handling:**
+
 - Axios interceptors handle 401 (unauthorized) → redirect to login
 - Toast notifications for user-friendly error messages
 - Loading states prevent duplicate requests
 - Form validation prevents invalid submissions
 
-### Handled Edge Cases:
+### Handled Edge Cases
 
 | Scenario | Handling |
 |----------|----------|
@@ -328,26 +349,29 @@ The application uses **JWT (JSON Web Tokens)** for stateless authentication:
 | **Missing Environment Variables** | Server fails fast with clear error message |
 | **Database Connection Loss** | Connection retry logic with exponential backoff |
 
-### Validation Layers:
+### Validation Layers
+
 1. **Client-side**: Zod schemas for immediate feedback
 2. **Server-side**: Joi schemas for data integrity
 3. **Database-level**: Mongoose schema constraints and indexes
 
 ## 🧪 Testing
 
-### Test Coverage:
+### Test Coverage
 
 **Backend Testing:**
+
 - Unit tests for enrollment logic (see `backend/src/__tests__/enrollments.test.js`)
 - API endpoint testing with Supertest
 - Database model validation tests
 
 **Frontend Testing:**
+
 - Component testing (to be implemented)
 - Integration testing for user flows
 - E2E testing scenarios (to be implemented)
 
-### Running Tests:
+### Running Tests
 
 ```bash
 # Backend tests
@@ -359,7 +383,8 @@ cd frontend
 npm test
 ```
 
-### Test Strategy:
+### Test Strategy
+
 - **Unit Tests**: Test individual functions and components
 - **Integration Tests**: Test API endpoints with database
 - **E2E Tests**: Test complete user workflows (planned)
@@ -369,108 +394,125 @@ npm test
 ## 🛠️ Development Setup
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - npm (v9 or higher)
 - MongoDB (local installation or MongoDB Atlas)
-- Docker & Docker Compose (optional)
+- Docker and Docker Compose (optional)
 
 ### Installation
 
-1. **Clone and install dependencies:**
-   ```bash
-   git clone <repository-url>
-   cd LSP-6/project
-   npm install
-   ```
+#### 1. Clone and install dependencies
 
-2. **Environment Configuration:**
-   
-   **Backend Environment Variables:**
-   Create a `.env` file in the `backend/` directory with the following variables:
-   ```env
-   NODE_ENV=development
-   PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/college_scheduling
-   JWT_SECRET=your-super-secret-jwt-key-change-in-production
-   JWT_EXPIRES_IN=7d
-   ALLOWED_ORIGINS=http://localhost:5173
-   RATE_LIMIT_WINDOW_MS=900000
-   RATE_LIMIT_MAX_REQUESTS=100
-   ```
-   
-   **Frontend Environment Variables:**
-   Create a `.env` file in the `frontend/` directory with the following variables:
-   ```env
-   VITE_API_URL=http://localhost:5000/api
-   ```
-   The backend CORS `ALLOWED_ORIGINS` defaults to `http://localhost:3000` if not set. For Vite dev (`http://localhost:5173`), ensure `ALLOWED_ORIGINS` includes `http://localhost:5173`.
+```bash
+git clone <repository-url>
+cd TimeTable_Buddy
+npm install
+```
 
-   ### Environment Variable Templates
+#### 2. Environment configuration
 
-   **Backend `.env.example`** (create this file in `backend/` directory):
-   ```env
-   # Server Configuration
-   NODE_ENV=development
-   PORT=5000
-   
-   # Database
-   MONGODB_URI=mongodb://localhost:27017/college_scheduling
-   # For MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/college_scheduling
-   
-   # Authentication
-   JWT_SECRET=your-super-secret-jwt-key-change-in-production
-   JWT_EXPIRES_IN=7d
-   
-   # CORS
-   ALLOWED_ORIGINS=http://localhost:5173
-   
-   # Rate Limiting
-   RATE_LIMIT_WINDOW_MS=900000
-   RATE_LIMIT_MAX_REQUESTS=100
-   ```
+**Backend**
 
-   **Frontend `.env.example`** (create this file in `frontend/` directory):
-   ```env
-   # Backend API URL
-   VITE_API_URL=http://localhost:5000/api
-   # Alternative: VITE_API_BASE_URL=http://localhost:5000/api
-   ```
+Create a `.env` file in the `backend/` directory:
 
-   **Important Notes:**
-   - ⚠️ Never commit actual `.env` files to version control
-   - ✅ Use `.env.example` as a template
-   - ✅ Add `.env` to `.gitignore`
-   - ✅ Generate strong `JWT_SECRET` for production (minimum 32 characters)
-   - ✅ Use different secrets for development and production
+```env
+NODE_ENV=development
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/college_scheduling
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_EXPIRES_IN=7d
+ALLOWED_ORIGINS=http://localhost:5173
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX_REQUESTS=100
+```
 
-3. **Start MongoDB:**
-   ```bash
-   # Using Docker (recommended)
-   docker-compose up mongodb -d
-   
-   # Or start MongoDB locally
-   mongod
-   ```
+**Frontend**
 
-4. **Start Development Servers:**
-   ```bash
-   # Start both frontend and backend
-   npm run dev
-   
-   # Or start individually
-   npm run dev:backend  # Backend runs on http://localhost:5000
-   npm run dev:frontend # Frontend runs on http://localhost:5173
-   ```
+Create a `.env` file in the `frontend/` directory:
 
-5. **Seed Database (Optional):**
-   ```bash
-   cd backend
-   npm run seed
-   ```
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+**CORS**
+
+- The backend CORS `ALLOWED_ORIGINS` defaults to `http://localhost:3000` if not set.
+- For Vite dev (`http://localhost:5173`), ensure `ALLOWED_ORIGINS` includes `http://localhost:5173`.
+
+**Environment variable templates**
+
+**Backend `.env.example`** (create in `backend/`):
+
+```env
+# Server Configuration
+NODE_ENV=development
+PORT=5000
+
+# Database
+MONGODB_URI=mongodb://localhost:27017/college_scheduling
+# For MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/college_scheduling
+
+# Authentication
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_EXPIRES_IN=7d
+
+# CORS
+ALLOWED_ORIGINS=http://localhost:5173
+
+# Rate Limiting
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX_REQUESTS=100
+```
+
+**Frontend `.env.example`** (create in `frontend/`):
+
+```env
+# Backend API URL
+VITE_API_URL=http://localhost:5000/api
+# Alternative: VITE_API_BASE_URL=http://localhost:5000/api
+```
+
+**Important**
+
+- Never commit actual `.env` files to version control.
+- Use `.env.example` as a template.
+- Add `.env` to `.gitignore`.
+- Generate a strong `JWT_SECRET` for production (minimum 32 characters).
+- Use different secrets for development and production.
+
+#### 3. Start MongoDB
+
+```bash
+# Using Docker (recommended)
+docker-compose up mongodb -d
+
+# Or start MongoDB locally
+mongod
+```
+
+#### 4. Start development servers
+
+```bash
+# Start both frontend and backend
+npm run dev
+
+# Or start individually
+npm run dev:backend   # Backend runs on http://localhost:5000
+npm run dev:frontend  # Frontend runs on http://localhost:5173
+```
+
+#### 5. Seed database (optional)
+
+```bash
+cd backend
+npm run seed
+```
 
 ## 🐳 Docker Setup
 
 ### Using Docker Compose (Recommended)
+
 ```bash
 # Start all services
 docker-compose up -d
@@ -481,9 +523,11 @@ docker-compose logs -f
 # Stop services
 docker-compose down
 ```
+
 By default, the backend exposes port 5000 and serves the frontend build. If you build and run the standalone frontend image (`Dockerfile.frontend`), it serves on port 80 inside the container; map to a host port as needed (e.g., `-p 5173:80`).
 
 ### Manual Docker Setup
+
 ```bash
 # Build and run backend (serves API on :5000 and static frontend if built)
 docker build -f Dockerfile.backend -t timetable-buddy-backend .
@@ -493,7 +537,9 @@ docker run -p 5000:5000 --env-file backend/.env timetable-buddy-backend
 docker build -f Dockerfile.frontend -t timetable-buddy-frontend .
 docker run -p 5173:80 timetable-buddy-frontend
 ```
-Notes:
+
+**Notes**
+
 - `Dockerfile.backend` exposes port 5000 and includes a health check at `/health`.
 - `Dockerfile.frontend` serves the built app with Nginx on port 80 and includes a root path health check.
 - If you run both containers separately, set `VITE_API_URL` in the frontend image to your backend URL.
@@ -501,6 +547,7 @@ Notes:
 ## 🔧 Available Scripts
 
 ### Root Level
+
 - `npm run dev` - Start both frontend and backend in development
 - `npm run start` - Start backend in production mode (from root)
 - `npm run build` - Build the frontend application for production
@@ -508,6 +555,7 @@ Notes:
 - `npm run dev:frontend` - Start frontend dev server only
 
 ### Backend Scripts
+
 - `npm run dev` - Start development server with nodemon
 - `npm run start` - Start production server
 - `npm run build` - (No build step required for Node.js)
@@ -516,6 +564,7 @@ Notes:
 - `npm run seed` - Seed database with sample data
 
 ### Frontend Scripts
+
 - `npm run dev` - Start Vite development server (default http://localhost:5173)
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
@@ -526,18 +575,21 @@ Notes:
 ## 🌐 API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 - `GET /api/auth/me` - Get current user profile (requires auth)
 - `POST /api/auth/logout` - Logout current session
 
 ### Users
+
 - `GET /api/users` - Get all users (admin only)
 - `GET /api/users/:id` - Get user by ID (requires auth)
 - `PUT /api/users/:id` - Update user (requires auth)
 - `DELETE /api/users/:id` - Delete user (admin only)
 
 ### Courses
+
 - `GET /api/courses` - Get all courses
 - `POST /api/courses` - Create new course (admin or instructor)
 - `GET /api/courses/:id` - Get course by ID
@@ -547,6 +599,7 @@ Notes:
 - `PUT /api/courses/:id/drop` - Drop course (requires auth)
 
 ### Lecture Slots
+
 - `GET /api/lecture-slots` - Get all lecture slots
 - `GET /api/lecture-slots/:id` - Get lecture slot by ID
 - `POST /api/lecture-slots` - Create new lecture slot (faculty or admin)
@@ -554,12 +607,14 @@ Notes:
 - `DELETE /api/lecture-slots/:id` - Delete lecture slot (faculty or admin)
 
 ### Faculty
+
 - `GET /api/faculty/lecture-slots` - Get faculty's lecture slots (faculty or admin)
 - `POST /api/faculty/lecture-slots` - Create lecture slot (faculty or admin)
 - `PUT /api/faculty/lecture-slots/:id` - Update lecture slot (faculty or admin)
 - `DELETE /api/faculty/lecture-slots/:id` - Delete lecture slot (faculty or admin)
 
 ### Enrollments
+
 - `GET /api/enrollments/me` - Get my timetable (student)
 - `POST /api/enrollments/:slotId` - Enroll in lecture slot (student)
 - `DELETE /api/enrollments/:slotId` - Drop from lecture slot (student)
@@ -567,6 +622,7 @@ Notes:
 - `PUT /api/enrollments/:id/cancel` - Force cancel an enrollment (admin)
 
 ### Schedules
+
 - `GET /api/schedules` - Get my schedules (requires auth)
 - `POST /api/schedules` - Create schedule (requires auth)
 - `GET /api/schedules/:id` - Get schedule by ID (requires auth)
@@ -574,19 +630,23 @@ Notes:
 - `DELETE /api/schedules/:id` - Delete schedule (requires auth)
 
 ### Health Check
+
 - `GET /health` - Server health status
 
 ## 🚀 Deployment
 
 ### Production Build
+
 ```bash
 npm run build
 ```
 
 ### Environment Variables
+
 Ensure all production environment variables are properly configured before deployment.
 
-Backend `.env` example (production):
+**Backend `.env` example (production)**
+
 ```env
 NODE_ENV=production
 PORT=5000
@@ -598,14 +658,16 @@ RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 ```
 
-Frontend `.env` example (production):
+**Frontend `.env` example (production)**
+
 ```env
 VITE_API_URL=https://your-backend-domain/api
 ```
 
 ## 🚀 Future Improvements
 
-### Planned Features:
+### Planned Features
+
 - [ ] **Email Notifications** - Automated emails for enrollment confirmations and waitlist updates
 - [ ] **Calendar Integration** - Export timetable to Google Calendar/iCal
 - [ ] **Conflict Detection** - Automatic detection of scheduling conflicts
@@ -615,7 +677,8 @@ VITE_API_URL=https://your-backend-domain/api
 - [ ] **Mobile App** - Native mobile application (React Native)
 - [ ] **Real-time Updates** - WebSocket integration for live enrollment updates
 
-### Technical Improvements:
+### Technical Improvements
+
 - [ ] **Comprehensive Testing** - Increase test coverage to >80%
 - [ ] **API Documentation** - Swagger/OpenAPI documentation
 - [ ] **Caching Layer** - Redis for frequently accessed data
@@ -625,7 +688,8 @@ VITE_API_URL=https://your-backend-domain/api
 - [ ] **Performance Monitoring** - Application performance monitoring (APM)
 - [ ] **CI/CD Pipeline** - Automated testing and deployment
 
-### Known Limitations:
+### Known Limitations
+
 - ⚠️ No email verification on registration
 - ⚠️ Limited error recovery for network failures
 - ⚠️ No offline support
@@ -647,6 +711,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support, email your-email@example.com or create an issue in the GitHub repository.
-#   T i m e t a b l e _ B u d d y 
- 
- 
