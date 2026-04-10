@@ -1,30 +1,14 @@
 import axios from 'axios';
 
-// IMPORTANT: Set `VITE_API_BASE_URL` on your deployment platform (e.g., Render) to your public API base URL.
-// Fallback order:
-// 1) VITE_API_BASE_URL (preferred)
-// 2) VITE_API_URL (legacy, still supported)
-// 3) '/api' same-origin (works when backend is reverse-proxied under the same host)
-const API_URL = (() => {
-  const fromPreferred = import.meta.env.VITE_API_BASE_URL as string | undefined;
-  const fromLegacy = import.meta.env.VITE_API_URL as string | undefined;
-  let url = fromPreferred || fromLegacy || '/api';
-
-  // If running on a non-localhost host, ensure we never point to a localhost URL
-  if (typeof window !== 'undefined') {
-    const host = window.location.hostname;
-    const isLocalHost = host === 'localhost' || host === '127.0.0.1';
-    if (!isLocalHost && /localhost(:\d+)?/i.test(url)) {
-      url = '/api';
-    }
-  }
-  return url;
-})();
+// 🚀 BULLETPROOF CLOUD URL
+// We are hardcoding the EC2 IP here so it is guaranteed to work on S3, 
+// completely bypassing any Vite .env build issues.
+const API_URL = 'http://15.206.168.110:5000/api';
 
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
-  timeout: parseInt(import.meta.env.VITE_API_TIMEOUT) || 10000,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
